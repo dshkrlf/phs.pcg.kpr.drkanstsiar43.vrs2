@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>System Security Monitor</title>
+<title> </title>
 
 <style>
 body {
@@ -28,7 +28,7 @@ body {
 #words {
   text-align: center;
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .progress {
@@ -59,18 +59,18 @@ body {
 
 <body>
 
-<!-- Écran 1 -->
+<!-- PHASE 1 : BARRE + MOTS -->
 <div id="scan" class="active">
-  <div id="words">Initializing…</div>
+  <div id="words"></div>
   <div class="progress">
     <div class="bar" id="bar"></div>
   </div>
 </div>
 
-<!-- Écran 2 -->
+<!-- PHASE 2 : LOGS -->
 <div id="logs"></div>
 
-<!-- Message final -->
+<!-- PHASE 3 : RÉVÉLATION -->
 <div id="final">
   holala, tu as vraiment cliqué dessus ?<br><br>
   Tsss. Fait attention, la prochaine fois qu'il y aura un lien dans mon mail,
@@ -78,19 +78,19 @@ body {
 </div>
 
 <script>
-/* ===== PHASE 1 : SCAN ===== */
+/* ===== PHASE 1 ===== */
 
 const wordsList = [
-  "Encrypting nodes",
-  "Resolving kernel vectors",
-  "Injecting entropy",
-  "Parsing memory blocks",
-  "Syncing shadow buffers",
-  "Calculating checksum",
-  "Authenticating socket",
-  "Flushing cache layer",
-  "Mounting secure volume",
-  "Handshake protocol"
+  "allocating entropy pool",
+  "resolving shadow pointers",
+  "injecting kernel hooks",
+  "syncing volatile buffers",
+  "hashing memory segments",
+  "mapping privileged pages",
+  "negotiating socket layer",
+  "bypassing sandbox limits",
+  "flushing syscall table",
+  "mounting hidden volume"
 ];
 
 const words = document.getElementById("words");
@@ -99,44 +99,46 @@ const bar = document.getElementById("bar");
 let progress = 0;
 
 const wordInterval = setInterval(() => {
-  words.textContent = wordsList[Math.floor(Math.random() * wordsList.length)] + "...";
+  words.textContent =
+    wordsList[Math.floor(Math.random() * wordsList.length)];
 }, 500);
 
 const scanInterval = setInterval(() => {
-  progress += Math.random() * 8;
+  progress += Math.random() * 7;
   if (progress >= 100) {
     progress = 100;
     clearInterval(scanInterval);
     clearInterval(wordInterval);
-    setTimeout(startLogs, 1000);
+    setTimeout(startLogs, 800);
   }
   bar.style.width = progress + "%";
-}, 300);
+}, 250);
 
-/* ===== PHASE 2 : LOGS ===== */
+/* ===== PHASE 2 ===== */
 
 function startLogs() {
   document.getElementById("scan").classList.remove("active");
+
   const logs = document.getElementById("logs");
   logs.classList.add("active");
 
   let interval = setInterval(() => {
     logs.textContent +=
-      "[SYS] access::" +
+      "[SYS] " +
       Math.random().toString(16).slice(2) +
-      " :: GRANTED\n";
+      " :: privilege escalation confirmed\n";
 
-    if (logs.textContent.length > 12000) {
-      logs.textContent = logs.textContent.slice(1000);
+    if (logs.textContent.length > 14000) {
+      logs.textContent = logs.textContent.slice(1200);
     }
-  }, 15);
+  }, 12);
 
-  /* durée volontairement longue */
+  /* phase longue volontaire */
   setTimeout(() => {
     clearInterval(interval);
     logs.classList.remove("active");
     document.getElementById("final").classList.add("active");
-  }, 10000); // 10 secondes
+  }, 12000); // 12 secondes
 }
 </script>
 
