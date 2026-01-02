@@ -16,30 +16,13 @@ body {
   align-items: center;
 }
 
-#scan, #logs, #final {
+#logs, #final {
   display: none;
   width: 80%;
 }
 
-#scan.active, #logs.active, #final.active {
+#logs.active, #final.active {
   display: block;
-}
-
-#words {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 25px;
-}
-
-.progress {
-  width: 100%;
-  background: #222;
-}
-
-.bar {
-  height: 18px;
-  width: 0%;
-  background: #00ff00;
 }
 
 #logs {
@@ -59,18 +42,10 @@ body {
 
 <body>
 
-<!-- PHASE 1 : BARRE + MOTS -->
-<div id="scan" class="active">
-  <div id="words"></div>
-  <div class="progress">
-    <div class="bar" id="bar"></div>
-  </div>
-</div>
+<!-- PHASE LOGS -->
+<div id="logs" class="active"></div>
 
-<!-- PHASE 2 : LOGS -->
-<div id="logs"></div>
-
-<!-- PHASE 3 : RÉVÉLATION -->
+<!-- RÉVÉLATION -->
 <div id="final">
   holala, tu as vraiment cliqué dessus ?<br><br>
   Tsss. Fait attention, la prochaine fois qu'il y aura un lien dans mon mail,
@@ -78,68 +53,25 @@ body {
 </div>
 
 <script>
-/* ===== PHASE 1 ===== */
+const logs = document.getElementById("logs");
 
-const wordsList = [
-  "allocating entropy pool",
-  "resolving shadow pointers",
-  "injecting kernel hooks",
-  "syncing volatile buffers",
-  "hashing memory segments",
-  "mapping privileged pages",
-  "negotiating socket layer",
-  "bypassing sandbox limits",
-  "flushing syscall table",
-  "mounting hidden volume"
-];
+const interval = setInterval(() => {
+  logs.textContent +=
+    "[SYS] " +
+    Math.random().toString(16).slice(2) +
+    " :: privilege escalation confirmed\n";
 
-const words = document.getElementById("words");
-const bar = document.getElementById("bar");
-
-let progress = 0;
-
-const wordInterval = setInterval(() => {
-  words.textContent =
-    wordsList[Math.floor(Math.random() * wordsList.length)];
-}, 500);
-
-const scanInterval = setInterval(() => {
-  progress += Math.random() * 7;
-  if (progress >= 100) {
-    progress = 100;
-    clearInterval(scanInterval);
-    clearInterval(wordInterval);
-    setTimeout(startLogs, 800);
+  if (logs.textContent.length > 16000) {
+    logs.textContent = logs.textContent.slice(1500);
   }
-  bar.style.width = progress + "%";
-}, 250);
+}, 10);
 
-/* ===== PHASE 2 ===== */
-
-function startLogs() {
-  document.getElementById("scan").classList.remove("active");
-
-  const logs = document.getElementById("logs");
-  logs.classList.add("active");
-
-  let interval = setInterval(() => {
-    logs.textContent +=
-      "[SYS] " +
-      Math.random().toString(16).slice(2) +
-      " :: privilege escalation confirmed\n";
-
-    if (logs.textContent.length > 14000) {
-      logs.textContent = logs.textContent.slice(1200);
-    }
-  }, 12);
-
-  /* phase longue volontaire */
-  setTimeout(() => {
-    clearInterval(interval);
-    logs.classList.remove("active");
-    document.getElementById("final").classList.add("active");
-  }, 12000); // 12 secondes
-}
+/* phase longue volontaire */
+setTimeout(() => {
+  clearInterval(interval);
+  logs.classList.remove("active");
+  document.getElementById("final").classList.add("active");
+}, 12000); // 12 secondes
 </script>
 
 </body>
