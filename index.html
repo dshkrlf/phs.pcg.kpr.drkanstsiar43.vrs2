@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>System Security Monitor</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
+  background: #0b0b0b;
+  color: #00ff00;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#container {
+  text-align: center;
+  max-width: 800px;
+}
+
+.progress {
+  width: 100%;
+  background: #222;
+  margin-top: 20px;
+}
+
+.bar {
+  height: 20px;
+  width: 0%;
+  background: #00ff00;
+}
+
+.hidden {
+  display: none;
+}
+
+#logs {
+  text-align: left;
+  font-size: 13px;
+  white-space: pre-wrap;
+  height: 80vh;
+  overflow: hidden;
+}
+
+#final {
+  color: white;
+  font-size: 22px;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+  <h1>⚠️ System Security Monitor</h1>
+  <p id="status">Suspicious activity detected…</p>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+</div>
+
+<div id="logs" class="hidden"></div>
+
+<div id="final" class="hidden">
+  holala, tu as vraiment cliqué dessus ?<br><br>
+  Tsss. Fait attention, la prochaine fois qu'il y aura un lien dans mon mail,
+  ce sera un VRAI malware !
+</div>
+
+<script>
+let progress = 0;
+const bar = document.getElementById("bar");
+const status = document.getElementById("status");
+
+const scan = setInterval(() => {
+  progress += Math.random() * 15;
+  if (progress >= 100) {
+    progress = 100;
+    clearInterval(scan);
+    status.textContent = "Remote access established…";
+    setTimeout(startHack, 1500);
+  }
+  bar.style.width = progress + "%";
+}, 400);
+
+function startHack() {
+  document.getElementById("container").style.display = "none";
+  const logs = document.getElementById("logs");
+  logs.classList.remove("hidden");
+
+  let interval = setInterval(() => {
+    logs.textContent +=
+      "[SYS] access granted :: " +
+      Math.random().toString(16).slice(2) +
+      "\n";
+    if (logs.textContent.length > 6000) {
+      logs.textContent = logs.textContent.slice(500);
+    }
+  }, 20);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    logs.style.display = "none";
+    document.getElementById("final").classList.remove("hidden");
+  }, 4000);
+}
+</script>
+
+</body>
+</html>
