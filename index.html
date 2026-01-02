@@ -7,47 +7,51 @@
 <style>
 body {
   margin: 0;
-  font-family: monospace;
-  background: #0b0b0b;
+  background: black;
   color: #00ff00;
+  font-family: monospace;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#container {
+#scan, #logs, #final {
+  display: none;
+  width: 80%;
+}
+
+#scan.active, #logs.active, #final.active {
+  display: block;
+}
+
+#words {
   text-align: center;
-  max-width: 800px;
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .progress {
   width: 100%;
   background: #222;
-  margin-top: 20px;
 }
 
 .bar {
-  height: 20px;
+  height: 18px;
   width: 0%;
   background: #00ff00;
 }
 
-.hidden {
-  display: none;
-}
-
 #logs {
-  text-align: left;
-  font-size: 13px;
-  white-space: pre-wrap;
   height: 80vh;
   overflow: hidden;
+  font-size: 13px;
+  white-space: pre-wrap;
 }
 
 #final {
   color: white;
-  font-size: 22px;
+  font-size: 24px;
   text-align: center;
 }
 </style>
@@ -55,59 +59,84 @@ body {
 
 <body>
 
-<div id="container">
-  <h1>⚠️ System Security Monitor</h1>
-  <p id="status">Suspicious activity detected…</p>
-
+<!-- Écran 1 -->
+<div id="scan" class="active">
+  <div id="words">Initializing…</div>
   <div class="progress">
     <div class="bar" id="bar"></div>
   </div>
 </div>
 
-<div id="logs" class="hidden"></div>
+<!-- Écran 2 -->
+<div id="logs"></div>
 
-<div id="final" class="hidden">
+<!-- Message final -->
+<div id="final">
   holala, tu as vraiment cliqué dessus ?<br><br>
   Tsss. Fait attention, la prochaine fois qu'il y aura un lien dans mon mail,
   ce sera un VRAI malware !
 </div>
 
 <script>
-let progress = 0;
-const bar = document.getElementById("bar");
-const status = document.getElementById("status");
+/* ===== PHASE 1 : SCAN ===== */
 
-const scan = setInterval(() => {
-  progress += Math.random() * 15;
+const wordsList = [
+  "Encrypting nodes",
+  "Resolving kernel vectors",
+  "Injecting entropy",
+  "Parsing memory blocks",
+  "Syncing shadow buffers",
+  "Calculating checksum",
+  "Authenticating socket",
+  "Flushing cache layer",
+  "Mounting secure volume",
+  "Handshake protocol"
+];
+
+const words = document.getElementById("words");
+const bar = document.getElementById("bar");
+
+let progress = 0;
+
+const wordInterval = setInterval(() => {
+  words.textContent = wordsList[Math.floor(Math.random() * wordsList.length)] + "...";
+}, 500);
+
+const scanInterval = setInterval(() => {
+  progress += Math.random() * 8;
   if (progress >= 100) {
     progress = 100;
-    clearInterval(scan);
-    status.textContent = "Remote access established…";
-    setTimeout(startHack, 1500);
+    clearInterval(scanInterval);
+    clearInterval(wordInterval);
+    setTimeout(startLogs, 1000);
   }
   bar.style.width = progress + "%";
-}, 400);
+}, 300);
 
-function startHack() {
-  document.getElementById("container").style.display = "none";
+/* ===== PHASE 2 : LOGS ===== */
+
+function startLogs() {
+  document.getElementById("scan").classList.remove("active");
   const logs = document.getElementById("logs");
-  logs.classList.remove("hidden");
+  logs.classList.add("active");
 
   let interval = setInterval(() => {
     logs.textContent +=
-      "[SYS] access granted :: " +
+      "[SYS] access::" +
       Math.random().toString(16).slice(2) +
-      "\n";
-    if (logs.textContent.length > 6000) {
-      logs.textContent = logs.textContent.slice(500);
-    }
-  }, 20);
+      " :: GRANTED\n";
 
+    if (logs.textContent.length > 12000) {
+      logs.textContent = logs.textContent.slice(1000);
+    }
+  }, 15);
+
+  /* durée volontairement longue */
   setTimeout(() => {
     clearInterval(interval);
-    logs.style.display = "none";
-    document.getElementById("final").classList.remove("hidden");
-  }, 4000);
+    logs.classList.remove("active");
+    document.getElementById("final").classList.add("active");
+  }, 10000); // 10 secondes
 }
 </script>
 
