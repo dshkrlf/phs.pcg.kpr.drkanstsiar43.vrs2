@@ -16,6 +16,7 @@ body {
   align-items: center;
 }
 
+/* Logs et message final */
 #logs, #final {
   display: none;
   width: 80%;
@@ -42,10 +43,10 @@ body {
 
 <body>
 
-<!-- PHASE LOGS -->
-<div id="logs" class="active"></div>
+<!-- LOGS -->
+<div id="logs"></div>
 
-<!-- RÉVÉLATION -->
+<!-- MESSAGE FINAL -->
 <div id="final">
   holala, tu as vraiment cliqué dessus ?<br><br>
   Tsss. Fait attention, la prochaine fois qu'il y aura un lien dans mon mail,
@@ -55,23 +56,30 @@ body {
 <script>
 const logs = document.getElementById("logs");
 
-const interval = setInterval(() => {
-  logs.textContent +=
-    "[SYS] " +
-    Math.random().toString(16).slice(2) +
-    " :: privilege escalation confirmed\n";
+/* 1️⃣ ÉCRAN NOIR TOTAL PENDANT 3s */
+setTimeout(startLogs, 3000);
 
-  if (logs.textContent.length > 16000) {
-    logs.textContent = logs.textContent.slice(1500);
-  }
-}, 10);
+function startLogs() {
+  logs.classList.add("active");
 
-/* phase longue volontaire */
-setTimeout(() => {
-  clearInterval(interval);
-  logs.classList.remove("active");
-  document.getElementById("final").classList.add("active");
-}, 12000); // 12 secondes
+  const interval = setInterval(() => {
+    logs.textContent +=
+      "[SYS] " +
+      Math.random().toString(16).slice(2) +
+      " :: privilege escalation confirmed\n";
+
+    if (logs.textContent.length > 18000) {
+      logs.textContent = logs.textContent.slice(2000);
+    }
+  }, 10);
+
+  /* 2️⃣ LOGS LONGS */
+  setTimeout(() => {
+    clearInterval(interval);
+    logs.classList.remove("active");
+    document.getElementById("final").classList.add("active");
+  }, 12000); // 12 secondes de logs
+}
 </script>
 
 </body>
